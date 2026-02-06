@@ -1,0 +1,138 @@
+/* ========== Base ========== */
+:root {
+  --bg: #0b1220;
+  --card: #111a2e;
+  --text: #e8eefc;
+  --muted: #b6c2e2;
+  --accent: #5aa7ff;
+  --accent-hover: #4a8dff; /* New: Hover color */
+  --line: rgba(255, 255, 255, 0.10);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: linear-gradient(160deg, var(--bg), #060b14);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s ease; /* Animation */
+}
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+}
+
+/* ========== Header ========== */
+.site-header { padding: 28px 0; border-bottom: 1px solid var(--line); }
+.header-wrap { display: flex; gap: 18px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.profile { display: flex; align-items: center; gap: 14px; }
+.avatar { width: 72px; height: 72px; border-radius: 16px; object-fit: cover; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.04); }
+.profile-text h1 { font-size: 1.6rem; margin: 0; letter-spacing: 0.2px; }
+.title { margin: 4px 0 0; font-weight: 600; color: var(--muted); }
+.subtitle { margin: 2px 0 0; color: var(--muted); font-size: 0.95rem; }
+.quick-contact { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+
+/* ========== Layout ========== */
+.main-grid { display: flex; gap: 18px; padding: 18px 0 28px; align-items: flex-start; }
+.sidebar { flex: 0 0 280px; display: flex; flex-direction: column; gap: 16px; }
+.content { flex: 1; display: flex; flex-direction: column; gap: 18px; }
+
+/* ========== Cards ========== */
+.card {
+  background: rgba(17, 26, 46, 0.75);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  backdrop-filter: blur(8px);
+  /* New: Card hover effect */
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ========== NEW: Navigation Buttons ========== */
+.nav-card {
+  padding: 10px; /* Tighter padding for menu */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
+.nav-btn.active {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(90, 167, 255, 0.3);
+}
+
+/* ========== Typography & Elements ========== */
+h2 { margin: 0 0 10px; font-size: 1.15rem; letter-spacing: 0.2px; }
+h3 { margin: 0; font-size: 1.02rem; }
+.muted { color: var(--muted); }
+.chips { list-style: none; padding-left: 0; display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; }
+.chips li { padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.04); font-size: 0.92rem; }
+.item-top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.bullets, .contact-list { margin: 8px 0 0; padding-left: 18px; }
+.bullets li, .contact-list li { margin: 6px 0; }
+.contact-list { list-style: none; padding: 0; }
+.contact-list .label { display: inline-block; min-width: 70px; font-weight: 700; color: var(--muted); }
+.site-footer { border-top: 1px solid var(--line); padding: 18px 0 26px; margin-top: 20px;}
+.footer-wrap { display: flex; justify-content: space-between; }
+
+/* ========== NEW: Animations ========== */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeInScale 0.4s ease-out forwards;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .main-grid { flex-direction: column; }
+  .sidebar { width: 100%; flex: auto; }
+  .nav-card { flex-direction: row; overflow-x: auto; padding: 8px; }
+  .nav-btn { flex: 1; text-align: center; white-space: nowrap; }
+}
