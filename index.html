@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mahrukh Kanwal | Portfolio</title>
+<style>
+  /* ================= VARIABLES ================= */
+  :root {
+    /* DARK MODE (Default) */
+    --bg-color: #000000;       
+    --sidebar-bg: #0a0a0a;     
+    --card-bg: #111111;        
+    --text-main: #ffffff;      
+    --text-muted: #a0a0a0;     
+    --accent: #3b82f6;         
+    --accent-hover: #2563eb;
+    --border: #222222;         
+    --input-bg: #1a1a1a;
+  }
+
+  /* LIGHT MODE OVERRIDES */
+  body.light-mode {
+    --bg-color: #f3f4f6;
+    --sidebar-bg: #ffffff;
+    --card-bg: #ffffff;
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --border: #e5e7eb;
+    --input-bg: #f9fafb;
+  }
+
+  /* ================= RESET & BASE ================= */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    overflow: hidden; 
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth Theme Switch */
+  }
+
+  /* ================= LAYOUT ================= */
+  .container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    gap: 20px;
+    height: 90vh;
+  }
+
+  /* ================= SIDEBAR (LEFT) ================= */
+  .sidebar {
+    flex: 0 0 280px;
+    background-color: var(--sidebar-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* Theme Toggle Button */
+  .theme-toggle {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+  }
+  .theme-toggle:hover { background: var(--border); }
+
+  .profile-section {
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+    background-color: #222;
+    border-radius: 20px;
+    margin: 0 auto 15px;
+    display: block;
+    object-fit: cover;
+    border: 1px solid var(--border);
+  }
+
+  h1 { font-size: 1.3rem; margin-bottom: 4px; color: var(--text-main); }
+  .role { color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+  .location { color: var(--text-muted); font-size: 0.85rem; }
+
+  /* DOWNLOAD CV BUTTON */
+  .btn-download {
+    display: block;
+    width: 100%;
+    background-color: var(--accent);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    transition: background 0.2s;
+  }
+  .btn-download:hover { background-color: var(--accent-hover); }
+
+  /* NAVIGATION BUTTONS */
+  nav { display: flex; flex-direction: column; gap: 8px; }
+
+  .nav-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 12px 16px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .nav-btn:hover { background-color: var(--card-bg); color: var(--text-main); padding-left: 22px; }
+  .nav-btn.active { background-color: var(--accent); color: white; font-weight: 600; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+
+  /* SIDEBAR SKILLS */
+  .skills-container { margin-top: auto; }
+  .skills-label { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 10px; font-weight: bold; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { background: var(--card-bg); color: var(--text-muted); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; border: 1px solid var(--border); }
+
+  /* ================= CONTENT AREA (RIGHT) ================= */
+  .main-content {
+    flex: 1;
+    background-color: var(--sidebar-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    overflow-y: auto;
+    position: relative;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* ================= SECTIONS & ANIMATIONS ================= */
+  .section { display: none; }
+
+  .section.active-section {
+    display: block;
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slideUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* CONTENT STYLING */
+  h2 { font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; color: var(--text-main); }
+  p { margin-bottom: 15px; color: var(--text-muted); font-size: 1rem; }
+  
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease, border-color 0.2s, background-color 0.3s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: var(--text-muted); }
+  
+  .card-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px;}
+  .card h3 { color: var(--text-main); font-size: 1.1rem; margin: 0; }
+  .card-meta { font-size: 0.85rem; color: var(--accent); font-family: monospace; }
+  .card-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; font-style: italic;}
+  
+  .bullets { padding-left: 20px; color: var(--text-muted); }
+  .bullets li { margin-bottom: 5px; }
+
+  /* CONTACT FORM */
+  .form-group { margin-bottom: 15px; }
+  .form-input, .form-textarea {
+    width: 100%;
+    padding: 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-main);
+    font-family: inherit;
+    transition: border-color 0.3s;
+  }
+  .form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .btn-submit {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+  .btn-submit:hover { background-color: var(--accent-hover); }
+
+  /* CONTACT LINKS */
+  .contact-link { display: block; color: var(--text-muted); margin-bottom: 10px; text-decoration: none; font-size: 1.1rem; }
+  .contact-link span { color: var(--accent); font-weight: bold; margin-right: 10px; }
+  .contact-link:hover { color: var(--text-main); }
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width: 850px) {
+    .container { flex-direction: column; height: auto; padding-bottom: 40px; }
+    .sidebar { flex: none; width: 100%; }
+    body { overflow-y: auto; height: auto; display: block; }
+    .main-content { height: auto; min-height: 500px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <aside class="sidebar">
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <span id="theme-icon">☀</span> Switch Theme
+    </button>
+
+    <div class="profile-section">
+      <img src="images/profile.jpg" alt="Mahrukh Kanwal" class="avatar" onerror="this.src='https://via.placeholder.com/150'">
+      <h1>Mahrukh Kanwal</h1>
+      <p class="role">Computer Science Student</p>
+      <p class="location">Lahore, Punjab, Pakistan</p>
+      
+      <a href="cv.pdf" download class="btn-download">Download CV</a>
+    </div>
+
+    <nav>
+      <button class="nav-btn active" onclick="showSection('about', this)">About Me</button>
+      <button class="nav-btn" onclick="showSection('education', this)">Education</button>
+      <button class="nav-btn" onclick="showSection('projects', this)">Projects & Exp</button>
+      <button class="nav-btn" onclick="showSection('awards', this)">Accomplishments</button>
+      <button class="nav-btn" onclick="showSection('contact', this)">Contact</button>
+    </nav>
+
+    <div class="skills-container">
+      <div class="skills-label">Technical Skills</div>
+      <div class="chips">
+        <span class="chip">C / C++</span>
+        <span class="chip">Assembly</span>
+        <span class="chip">HTML/CSS</span>
+        <span class="chip">VS Code</span>
+        <span class="chip">Visual Studio</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    
+    <div id="about" class="section active-section">
+      <h2>About Me</h2>
+      <p>Motivated Computer Science student with a solid academic background and practical experience in software development. Eager to learn, build innovative solutions, and take on challenging projects.</p>
+      <p>I am currently looking for opportunities to grow in programming, software engineering, and game development.</p>
+      
+      <div class="card">
+        <h3>Core Competencies</h3>
+        <ul class="chips" style="margin-top:10px;">
+          <li class="chip">Leadership</li>
+          <li class="chip">Problem-solving</li>
+          <li class="chip">Team collaboration</li>
+          <li class="chip">Adaptability</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="education" class="section">
+      <h2>Education</h2>
+      
+      <div class="card">
+        <div class="card-header">
+          <h3>BS Computer Science</h3>
+          <span class="card-meta">2022 – Current</span>
+        </div>
+        <div class="card-subtitle">FAST-NUCES, Lahore</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>FSc Pre-Engineering</h3>
+          <span class="card-meta">2020 – 2022</span>
+        </div>
+        <div class="card-subtitle">Kinnaird College for Women University</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Matriculation</h3>
+          <span class="card-meta">2018 – 2020</span>
+        </div>
+        <div class="card-subtitle">Divisional Public School, Model Town</div>
+      </div>
+    </div>
+
+    <div id="projects" class="section">
+      <h2>Experience & Projects</h2>
+      
+      <div class="card">
+        <div class="card-header">
+          <h3>Private Home Tutor</h3>
+          <span class="card-meta">2021 – Current</span>
+        </div>
+        <ul class="bullets">
+          <li>Provided personalized academic support in Mathematics, Science, Chemistry, and Physics for grades 8–11.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Tetris Game</h3>
+          <span class="card-meta">DOS Assembly</span>
+        </div>
+        <ul class="bullets">
+          <li>Built a classic Tetris game using DOS Assembly language.</li>
+          <li>Focused on low-level programming, memory handling, and efficiency.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Car Parking Management System</h3>
+          <span class="card-meta">C# / Figma</span>
+        </div>
+        <ul class="bullets">
+          <li>Designed and implemented a university car parking system.</li>
+          <li>Enabled real-time identification of available parking spaces.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Candy Crush-style Game</h3>
+          <span class="card-meta">C++</span>
+        </div>
+        <ul class="bullets">
+          <li>Built a grid-based game with match detection and core gameplay mechanics.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="awards" class="section">
+      <h2>Accomplishments</h2>
+      <div class="card">
+        <ul class="bullets">
+          <li>93% marks in Matric and FSc</li>
+          <li>Participant: Arduino Uno competition</li>
+          <li>Active speaker in debate competitions</li>
+          <li>Participant in science exhibitions (school & college)</li>
+          <li>3rd position among all college students</li>
+          <li>Participant of Softech; organized FutureFest & Hackathon</li>
+          <li>Participant of NasCon 2024</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="contact" class="section">
+      <h2>Get in Touch</h2>
+      <p>I am available for projects and collaborations.</p>
+      
+      <div class="card">
+        <a href="tel:+923000369699" class="contact-link">
+          <span>PHONE:</span> +92 300 0369699
+        </a>
+        <a href="mailto:mahrukhkanwal4548@gmail.com" class="contact-link">
+          <span>EMAIL:</span> mahrukhkanwal4548@gmail.com
+        </a>
+        <div class="contact-link">
+          <span>LOC:</span> Lahore, Punjab, Pakistan
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Send a Message</h3>
+        <p style="font-size:0.9rem; margin-bottom:15px;">(This will open your email client)</p>
+        <form action="mailto:mahrukhkanwal4548@gmail.com" method="post" enctype="text/plain">
+          <div class="form-group">
+            <input type="text" name="name" class="form-input" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <input type="email" name="email" class="form-input" placeholder="Your Email" required>
+          </div>
+          <div class="form-group">
+            <textarea name="message" class="form-textarea" rows="4" placeholder="Your Message" required></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Send Message</button>
+        </form>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // 1. TAB SWITCHING LOGIC
+  function showSection(sectionId, button) {
+    document.querySelectorAll('.section').forEach(sec => {
+      sec.classList.remove('active-section');
+      sec.style.display = 'none';
+    });
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    setTimeout(() => {
+      const activeSec = document.getElementById(sectionId);
+      activeSec.style.display = 'block';
+      activeSec.classList.add('active-section');
+    }, 10);
+    button.classList.add('active');
+  }
+
+  // 2. THEME TOGGLE LOGIC
+  function toggleTheme() {
+    const body = document.body;
+    const icon = document.getElementById('theme-icon');
+    
+    // Toggle the class 'light-mode' on the body
+    body.classList.toggle('light-mode');
+
+    // Change icon based on mode
+    if (body.classList.contains('light-mode')) {
+      icon.textContent = "☾"; // Moon icon for Light Mode
+    } else {
+      icon.textContent = "☀"; // Sun icon for Dark Mode
+    }
+  }
+</script>
+
+</body>
+</html>
